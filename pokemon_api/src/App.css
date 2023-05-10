@@ -36,3 +36,8 @@
     transform: rotate(360deg);
   }
 }
+
+.PokesTable th, .PokesTable td {
+  text-align: left;
+  padding-right: 15px;
+}
