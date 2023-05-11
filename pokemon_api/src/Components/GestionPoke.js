@@ -15,7 +15,10 @@ class GestionPoke extends React.Component {
             stats_total: "",
             message: "",
             codeHTTP: "",
-            img: ""
+            img: "",
+            nomUser: "",
+            mdp: "",
+            cle: ""
         };
         this.addPokemon = this.addPokemon.bind(this);
         this.modifyPokemon = this.modifyPokemon.bind(this);
@@ -24,6 +27,7 @@ class GestionPoke extends React.Component {
         this.refresh = this.refresh.bind(this);
         this.deletePokemon = this.deletePokemon.bind(this);
         this.callPokeAPI = this.callPokeAPI.bind(this);
+        this.createUser = this.createUser.bind(this);
   
     }
 
@@ -33,6 +37,7 @@ class GestionPoke extends React.Component {
         this.setState({
             [name]: value
         });
+        console.log(this.state.nomUser)
     }
     
     clearInput(event) {
@@ -40,7 +45,10 @@ class GestionPoke extends React.Component {
             nom: "",
             type: "",
             abilite: "",        
-            stats_total: ""
+            stats_total: "",
+            nomUser: "",
+            mdp: "",
+            cle: ""
         });
     }
 
@@ -68,6 +76,39 @@ class GestionPoke extends React.Component {
         }
         )
     }
+
+    /**
+     * Fonction qui crée un user
+     */
+    createUser(){
+        axios({
+            method: 'POST',
+            url: 'http://127.0.0.1/EpreuveFinale/SLIM_finale/user',
+            data:{
+              nomUser: this.state.nomUser,
+              mdp: this.state.mdp,
+              cle: this.state.cle,
+            }
+          })
+          .then((resultat) =>{
+              if(resultat.status === 201){
+  
+                  this.setState({
+                      codeHTTP: resultat.status,
+                      message: resultat.statusText + " le traitement à bien fonctionner!" + " " + resultat.data.code_usager + " à été crée"
+                  })
+              }
+              else{
+                  this.setState({
+                      codeHTTP: resultat.status,
+                      message: resultat.statusText + " erreur est arrivé"
+                  })
+              }
+  
+          })
+
+    }
+
 
     /**
      * FONCTION QUI APPEL UN API QUI N'EST PAS LE MIEN
@@ -204,7 +245,61 @@ class GestionPoke extends React.Component {
         if(this.state.isLoaded){
             return (
             <div>
-                <img src={this.state.img} alt=''></img>
+                <form>
+                    <table>
+                        <label> - Connexion/Creation Usager -</label>
+                        <tr>------------------------------------------</tr>
+                        <tr>
+                            <td><label>Usager :</label></td>
+                            <td>
+                                <input 
+                                type='text'
+                                id='nomUser'
+                                name='nomUser'
+                                value={this.state.nomUser}
+                                onChange={this.handleChange}>
+                                </input>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><label>Mots de passe :</label></td>
+                            <td>
+                                <input 
+                                type='text'
+                                id='mdp'
+                                name='mdp'
+                                value={this.state.mdp}
+                                onChange={this.handleChange}>
+                                </input>
+                            </td>
+                        
+                        </tr>
+                        <tr>
+                            <td><label>Cle API :</label></td>
+                            <td>
+                                <input 
+                                type='text'
+                                id='cle'
+                                name='cle'
+                                value={this.state.cle}
+                                onChange={this.handleChange}>
+                                </input>
+                            </td>
+                        
+                        </tr>
+                        <tr>
+                                <td></td>
+                                <td style={{'textAlign':'right'}}>
+                                    <input type="button" value="Cancel" onClick={this.clearInput}/>
+                                    <input type="button" value="Créer" onClick={this.createUser}/>
+                                    <input type="button" value="Connecter" />
+                                </td>
+                        </tr>
+                        <tr>------------------------------------------</tr>
+                    </table>
+                </form>
+                <p>Image vien de -- https://pokeapi.co/ -- </p>
+                <img src={this.state.img} alt='' height={200}></img>
                 <h2>Ajouter/Modifier un Pokémon</h2>
                 <p>HTTP: {this.state.codeHTTP}</p>
                 <p>{this.state.message}</p>
