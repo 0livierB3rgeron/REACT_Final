@@ -17,7 +17,7 @@ class TableauPoke extends React.Component {
         let ligneTab = [];
         this.props.tableauPoke.forEach(function(pokemons) {
 
-            ligneTab.push(<LigneTableauPoke  getRow={this.props.getRow} tableauPoke={pokemons} key={pokemons.id}/>);
+            ligneTab.push(<LigneTableauPoke  getRow={this.props.getRow} Poke={pokemons} key={pokemons.id}/>);
             
         }.bind(this));
         return (
